@@ -1,16 +1,29 @@
-# React + Vite
+# Northstar Analytics Studio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive analytics dashboard built with React, Vite, React Router and Recharts. The current version focuses on a complete, polished frontend experience with explicit sample-data labeling.
 
-Currently, two official plugins are available:
+## Features
+- Responsive dashboard shell and reusable navigation
+- KPI cards with selectable 7-day, 30-day and 90-day views
+- Revenue and customer-growth charts
+- Searchable recent-activity table
+- CSV export for the visible activity results
+- Empty search state, keyboard focus styles, and mobile layout
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Run locally
+```bash
+npm install
+npm run dev
+```
 
-## React Compiler
+## Build and lint
+```bash
+npm run build
+npm run lint
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Additional frontend flagship
+The `cleanroom/` directory contains **Cleanroom Studio**, a standalone local-first CSV cleanup workspace. Open `cleanroom/index.html` in a modern browser; no build step or backend is required.
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Data note
+The dashboard metrics and chart values are illustrative sample data. The UI does not claim to connect to a production analytics API.
