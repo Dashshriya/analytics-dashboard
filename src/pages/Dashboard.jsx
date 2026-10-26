@@ -23,7 +23,7 @@ function Dashboard() {
   const visibleActivity = useMemo(() => activity.filter((item) => Object.values(item).some((value) => value.toLowerCase().includes(query.toLowerCase()))), [query])
   const exportActivity = () => {
     const csv = [["Order", "Event", "Customer", "Amount", "Status", "Time"], ...visibleActivity.map((item) => [item.id, item.event, item.person, item.amount, item.status, item.time])]
-      .map((row) => row.map((value) => '"' + String(value).replaceAll('"', '""') + '"').join(",")).join("\\r\\n")
+      .map((row) => row.map((value) => '"' + String(value).replaceAll('"', '""') + '"').join(",")).join("\r\n")
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }))
     const anchor = document.createElement("a")
     anchor.href = url
