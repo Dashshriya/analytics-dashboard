@@ -1,0 +1,4 @@
+export function normalizeTaskTitle(value){return String(value??'').trim().replace(/\s+/g,' ')}
+export function filterTasks(tasks,filter='all',query=''){const needle=String(query).trim().toLocaleLowerCase();return tasks.filter(task=>(filter==='active'?!task.completed:filter==='done'?task.completed:true)&&(!needle||task.title.toLocaleLowerCase().includes(needle)))}
+export function summarizeTasks(tasks){return{total:tasks.length,completed:tasks.reduce((n,t)=>n+Number(Boolean(t.completed)),0),active:tasks.reduce((n,t)=>n+Number(!t.completed),0)}}
+export function createTask(title,now=new Date()){const normalized=normalizeTaskTitle(title);if(!normalized)throw new TypeError('Task title cannot be empty.');return{id:globalThis.crypto?.randomUUID?.()??'task-'+now.getTime()+'-'+Math.random().toString(16).slice(2),title:normalized,completed:false,createdAt:now.toISOString()}}
