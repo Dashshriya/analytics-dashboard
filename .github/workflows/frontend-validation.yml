@@ -1,0 +1,32 @@
+name: Frontend validation
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+jobs:
+  build-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Check standalone Cleanroom scripts
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          for name in ["cleanroom/index.html", "public/cleanroom/index.html"]:
+              source = Path(name).read_text()
+              scripts = re.findall(r"<script>(.*?)</script>", source, re.S)
+              if not scripts:
+                  raise SystemExit(f"No inline script found in {name}")
+              Path("/tmp/cleanroom-check.js").write_text(scripts[-1])
+              print(f"Checking {name}")
+              import subprocess
+              subprocess.run(["node", "--check", "/tmp/cleanroom-check.js"], check=True)
+          PY
