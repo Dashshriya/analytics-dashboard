@@ -20,6 +20,18 @@ function Dashboard() {
   const [query, setQuery] = useState("")
   const [notice, setNotice] = useState("")
   const metrics = ranges[range]
+  const now = new Date()
+  const todayLabel = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(now).toUpperCase()
+  const greeting = now.getHours() < 12
+    ? "Good morning"
+    : now.getHours() < 18
+      ? "Good afternoon"
+      : "Good evening"
   const visibleActivity = useMemo(() => activity.filter((item) => Object.values(item).some((value) => value.toLowerCase().includes(query.toLowerCase()))), [query])
   const exportActivity = () => {
     const csv = [["Order", "Event", "Customer", "Amount", "Status", "Time"], ...visibleActivity.map((item) => [item.id, item.event, item.person, item.amount, item.status, item.time])]
@@ -29,7 +41,7 @@ function Dashboard() {
     anchor.href = url
     anchor.download = "analytics-activity.csv"
     anchor.click()
-    URL.revokeObjectURL(url)
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000)
     setNotice("Activity export downloaded")
     window.setTimeout(() => setNotice(""), 2500)
   }
@@ -47,7 +59,7 @@ function Dashboard() {
       <main className="analytics-main">
         <header className="analytics-topbar"><div><span className="crumb-muted">Workspace</span><span className="crumb-slash">/</span><strong>Overview</strong></div><div className="topbar-right"><span className="demo-chip"><i /> DEMO DATA</span><div className="user-avatar">SD</div></div></header>
         <div className="analytics-content">
-          <section className="page-heading"><div><div className="eyebrow">MONDAY, OCTOBER 26, 2026</div><h1>Good afternoon, Shriya <span>✳</span></h1><p>Here’s what’s happening with your store today.</p></div><div className="heading-actions"><label className="range-label" htmlFor="range">Period</label><select id="range" value={range} onChange={(event) => setRange(event.target.value)} className="range-select"><option>7 days</option><option>30 days</option><option>90 days</option></select><button className="export-button" onClick={exportActivity}>↓ Export activity</button></div></section>
+          <section className="page-heading"><div><div className="eyebrow">{todayLabel}</div><h1>{greeting}, Shriya <span>✳</span></h1><p>Here’s what’s happening with your store today.</p></div><div className="heading-actions"><label className="range-label" htmlFor="range">Period</label><select id="range" value={range} onChange={(event) => setRange(event.target.value)} className="range-select"><option>7 days</option><option>30 days</option><option>90 days</option></select><button className="export-button" onClick={exportActivity}>↓ Export activity</button></div></section>
           <section className="metric-grid" aria-label="Key metrics">
             {[["Total customers", metrics.users, metrics.delta[0], "↗"], ["Gross revenue", metrics.revenue, metrics.delta[1], "$"], ["Orders", metrics.orders, metrics.delta[2], "↗"], ["Conversion rate", metrics.conversion, metrics.delta[3], "%"]].map(([label, value, delta, symbol]) => <article className="metric-card" key={label}><div className="metric-top"><span>{label}</span><span className="metric-icon">{symbol}</span></div><div className="metric-value">{value}</div><div className="metric-change"><span>↗ {delta}</span><span className="muted">vs previous period</span></div></article>)}
           </section>
